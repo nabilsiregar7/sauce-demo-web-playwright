@@ -8,7 +8,8 @@ export class CartPage {
     }
 
     async verifyItemInCart(itemName: string): Promise<boolean> {
-        return this.page.locator(`text=${itemName}`).isVisible();
+        const itemLocator = this.page.locator(`.cart_item:has-text("${itemName}")`);
+        return await itemLocator.isVisible();
     }
 
     async proceedToCheckout() {

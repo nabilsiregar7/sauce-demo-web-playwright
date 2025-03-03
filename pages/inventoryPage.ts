@@ -8,7 +8,8 @@ export class InventoryPage {
     }
 
     async addItemToCart(itemName: string) {
-        await this.page.locator(`text=${itemName}`).locator('xpath=..').locator('button').click();
+        const itemLocator = this.page.locator(`.inventory_item:has-text("${itemName}")`);
+        await itemLocator.locator('button[data-test^="add-to-cart"]').click();
     }
 
     async goToCart() {
@@ -21,5 +22,10 @@ export class InventoryPage {
 
     async getItemNames(): Promise<string[]> {
         return this.page.locator('.inventory_item_name').allTextContents();
+    }
+
+    async getItemPrices(): Promise<number[]> {
+        const pricesText = await this.page.locator('.inventory_item_price').allTextContents();
+        return pricesText.map(price => parseFloat(price.replace('$', '')));
     }
 }
